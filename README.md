@@ -8,7 +8,6 @@ The demo lends heavily from the excellent [d3js map tutorial](http://bost.ocks.o
 To view the result of this repo visit b.lock [#6009045](http://bl.ocks.org//thefitzpaddy/6009045)!
 
 ## Data Preparation
-===
 The following outlines the method by which to prepare your own data in TopoJSON format for use by d3js.
 
 ### Prerequisites
@@ -63,7 +62,6 @@ Simplification
 
 
 ## D3js Twine API Usage
-===
 The D3js Twine API is designed on the principals of method chaning and [d3.selections](http://bost.ocks.org/mike/selection/), following the [reusable pattern](http://bost.ocks.org/mike/chart/) with a minor modification in the binding of the div element to the DOM so that it is hidden to the user.
 
 ### Adding a Map
