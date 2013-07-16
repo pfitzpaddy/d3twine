@@ -82,8 +82,3 @@ aside, .comment {
 .html .attribute, .css .attribute, .javascript .class, .javascript .special {
     color: #E6550D;
 }
-#map {
-    border: 1px solid #DEDEDE;
-    height: 600px;
-    width: 1000px;
-}
