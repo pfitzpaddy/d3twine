@@ -2,12 +2,10 @@ D3js Reusable Map
 ===
 D3js Reusable Map is the beginings of an interactive map API based on the [D3js](http://d3js.org/) library created by [mbostock](https://github.com/mbostock).
 
-The demo lends heavily from the excellent [d3js map tutorial](http://bost.ocks.org/mike/map/) with a focus on [reusable pattern](http://bost.ocks.org/mike/chart/) and help from [bleeding edge](http://bleedingedgepress.com/our-books/developing-a-d3-js-edge/).
+The demo lends heavily from the excellent [d3js map tutorial](http://bost.ocks.org/mike/map/) with a focus on [reusable pattern](http://bost.ocks.org/mike/chart/) and help from [bleeding edge](http://bleedingedgepress.com/our-books/developing-a-d3-js-edge/). That and the many [b.locks](http://bl.ocks.org/mbostock) and [d3js tutorials](https://github.com/mbostock/d3/wiki/Tutorials) from [mbostock](https://github.com/mbostock) that demonstrate d3js usage!
 
-That and the many [b.locks](http://bl.ocks.org/mbostock) and [d3js tutorials](https://github.com/mbostock/d3/wiki/Tutorials) from [mbostock](https://github.com/mbostock) that demonstrate d3js usage!
-
-#### [B.lock #6003064](http://bl.ocks.org//thefitzpaddy/6003064)
-To view the result of this repo visit b.lock [#6003064](http://bl.ocks.org//thefitzpaddy/6003064)!
+#### [B.lock #6009045](http://bl.ocks.org//thefitzpaddy/6009045)
+To view the result of this repo visit b.lock [#6009045](http://bl.ocks.org//thefitzpaddy/6009045)!
 
 ## Data Preparation
 ===
@@ -38,11 +36,13 @@ The Shapefiles from [Natural Earth](http://www.naturalearthdata.com/) are conver
 
 - Shp to GeoJSON using [ogr2ogr](http://www.gdal.org/ogr2ogr.html)
 
-		~# ogr2ogr -f GeoJSON -select oid_, iso_a2, iso_a3, admin, pop_est output.json input.shp</pre></code>
+		~# ogr2ogr -f GeoJSON -select oid_, iso_a2, iso_a3, admin, pop_est 
+			-o output.json input.shp
 
 - GeoJSON to TopoJSON using [TopoJSON API](https://github.com/mbostock/topojson/wiki/Command-Line-Reference)
 
-		~# topojson -p OID_, ISO_A2, ISO_A3, ADMIN, POP_EST -o output.json -- admin0=input.json/input.shp</pre></code>
+		~# topojson -p OID_, ISO_A2, ISO_A3, ADMIN, POP_EST 
+			-o output.json -- admin0=input.json/input.shp
 
 ##### Notes on Processing 
 TopoJSON
@@ -51,13 +51,15 @@ TopoJSON
 - The attributes entered using the properties parameter (-p) are CASE SENSITIVE to those in the input file
 - To specify the object name within the generated TopoJSON file, prefix the input file with “name=”
 		
-		~# topojson -p OID_, ISO_A2, ISO_A3, ADMIN, POP_EST -o output.json -- admin0=input.json/input.shp
+		~# topojson -p OID_, ISO_A2, ISO_A3, ADMIN, POP_EST 
+			-o output.json -- admin0=input.json/input.shp
 
 Simplification
 
 - TopoJSON includes a parameter for polygon [simplification](http://bost.ocks.org/mike/simplify/) using the Visvalingam algorithm.
 
-		~# topojson -p OID_, ISO_A2, ISO_A3, ADMIN, POP_EST --simplify-proportion 0.8 -o output.json input.json/input.shp</pre></code>
+		~# topojson -p OID_, ISO_A2, ISO_A3, ADMIN, POP_EST 
+			--simplify-proportion 0.8 -o output.json input.json/input.shp
 
 
 ## D3js Twine API Usage
@@ -145,6 +147,6 @@ The current implementation supports a specific data layer _("admin")_, this will
 
 There are many areas to improve the API, pull requests welcome!
 
-###Example
-#### [B.lock #6003064](http://bl.ocks.org//thefitzpaddy/6003064)
-To view the result of this repo visit b.lock [#6003064](http://bl.ocks.org//thefitzpaddy/6003064)!
+##### Example
+#### [B.lock #6009045](http://bl.ocks.org//thefitzpaddy/6009045)
+To view the result of this repo visit b.lock [#6009045](http://bl.ocks.org//thefitzpaddy/6009045)!
