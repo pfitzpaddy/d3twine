@@ -19,18 +19,18 @@ d3.twine.map = function (id){
 		svg,g,
 		width = window.innerWidth,
 		height = window.innerHeight,
-		duration = 3000;
+		duration = 3000,
 		projection = d3.geo.mercator(),
 		path = d3.geo.path(),
 		scale = 250,
 		center = [0,0],
 		region = "world",
-		layers = [],
-		selectedRegion = false,
-		tooltip = false;
-		tt = d3.select("body").append("div").attr("class", "tt").style("opacity", 0),
-		dataUrl = {"admin":"js/data/admin0_50m.json"},
-		dataLoaded = false;
+		regionSelected = false,
+		tooltip = d3.select("body").append("div").attr("class", "tooltip").style("opacity", 0),
+		tooltipOn = false,
+		clickableOn = false,
+		layers = {"admin":"js/data/admin0_50m.json"},
+		layerLoaded = false;
 
 		// Bind svg to DOM using d3 selection.
 		exports(d3.select(id));
@@ -141,7 +141,7 @@ d3.twine.map = function (id){
 				break;
 			case "europe":
 				scale = 500;
-				center = [35,50];
+				center = [15,50];
 				break;
 			case "north america":
 				scale = 400;
@@ -153,7 +153,7 @@ d3.twine.map = function (id){
 				break;
 			default:
 				// Zoom to ISO once data is loaded.
-				if(dataLoaded) {
+				if(layerLoaded) {
 					exports.zoom(svg.selectAll('#admin-'+region));
 				}
 		}
@@ -166,8 +166,8 @@ d3.twine.map = function (id){
 		svg.select(".selected").classed("selected",false);
 
 		// If no country selected
-		if (selectedRegion != region){
-			selectedRegion = region;
+		if (regionSelected != region){
+			regionSelected = region;
 			// Update class to selected
 			_selection.classed("selected",true);
 
@@ -183,20 +183,34 @@ d3.twine.map = function (id){
 				+ "translate(" + t + ")");			
 			
 		}else{
-			selectedRegion = false;
+			regionSelected = false;
+			// Transform for zoom back to current scale/translation
+		    var x = width / 2;
+		    var y = height / 2;
+		    var k = 1;
+			g.transition().duration(duration).attr("transform", 
+					"translate(" + width / 2 + "," + height / 2 + ")"
+					+ "scale(" + k + ")"
+					+ "translate(" + -x + "," + -y + ")");
 		}
 	};	
 
-	exports.tooltip = function(_) {
-		if (!arguments.length) return tooltip;
-		tooltip = _;
+	exports.tooltipOn = function(_) {
+		if (!arguments.length) return tooltipOn;
+		tooltipOn = _;
 		return exports;
 	};
+
+	exports.clickableOn = function(_) {
+		if (!arguments.length) return clickableOn;
+		clickableOn = _;
+		return exports;
+	};	
 
 	// Create a method to load the geojson file, and execute a custom callback on response.
 	exports.addLayer = function(_layer) {
 		// Load json file using d3.json.
-		d3.json(dataUrl[_layer], function (_err, _result) {
+		d3.json(layers[_layer], function (_err, _result) {
 
 			// Todo - udpate to [d3.dispatch](https://github.com/mbostock/d3/wiki/Internals#wiki-d3_dispatch)
 			dataLoaded = 1;
@@ -221,12 +235,12 @@ d3.twine.map = function (id){
 			.attr("d", path)
 	        .on("mouseover", function(d) {
 	        	// Tooltip active
-	        	if(tooltip){
+	        	if(tooltipOn){
 	        		// Set active country & apply css
 	        		var active = g.selectAll("#admin-"+d.properties.iso_a2).classed("active",true);
 
 	        		// Update div opacity and text
-		            tt.transition()
+		            tooltip.transition()
 		                .duration(200)      
 		                .text(d.properties.admin)
 		                .style("opacity", 1);
@@ -235,7 +249,7 @@ d3.twine.map = function (id){
 	        .on("mousemove", function() {
 	        	// Update position
 	        	if(tooltip){
-					tt.style("left", (d3.event.pageX+5) + "px")     
+					tooltip.style("left", (d3.event.pageX+5) + "px")     
 						.style("top", (d3.event.pageY-42) + "px");  
 				}
 	        })
@@ -244,19 +258,27 @@ d3.twine.map = function (id){
         		g.selectAll(".active").classed("active",false);
 
         		// Set opacity to 0
-	            tt.transition()        
+	            tooltip.transition()        
 	                .duration(500)      
 	                .style("opacity", 0);
 	        })
 	        .on('click', function(d){
 	        	// Call the d3.twine zoom function
-	        	exports.zoom(svg.selectAll('#admin-'+d.properties.iso_a2));
+	        	if(clickableOn){
+	        		exports.zoom(svg.selectAll('#admin-'+d.properties.iso_a2));
+	        	}
 	        });
 	};
 
+	// Add Twine indicator
+	exports.addIndicator = function(_namespace,_ind,_locid,_tLevel,_gLevel,_sDate,_eDate) {
+
+		return exports;
+	};	
+
 	exports.update = function() {
 		// Call self to update
-		exports(exports);
+		exports();
 	};
 	
 	// Bind our custom events to the "on" method of our function.
