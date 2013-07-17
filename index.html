@@ -29,7 +29,7 @@
 		}
 
     	/* Tooltip popup */
-		.tt {
+		.tooltip {
 			position: absolute;
 			text-align: center;
 			padding: 8px;
@@ -43,10 +43,8 @@
 	<!-- d3js includes -->
     <script src="http://d3js.org/d3.v3.min.js"></script>
 	<script src="http://d3js.org/topojson.v1.min.js"></script>
-	<script src="http://d3js.org/queue.v1.min.js"></script>
     <!-- jquery 1.9.1 include -->
     <script src="http://code.jquery.com/jquery-1.9.1.min.js"></script>
-
 
 	<!-- d3.twine -->
 	<script src="js/d3.twine.js"></script>
@@ -56,11 +54,15 @@
 
 			// Initialise d3js reusable map with options.
 			var myMap = d3.twine.map("#map")
-				.tooltip(true)
-				.region("PK");
+				.tooltipOn(true)
+				.clickableOn(true)
+				.height(400);
 
-			// Add base layer, update() the SVG and enjoy!
-			myMap.addLayer("admin").update();
+			// Add base layer
+			myMap.addLayer("admin");
+
+			// Update the SVG and enjoy!
+			myMap.update();
 
 		});
     </script>
